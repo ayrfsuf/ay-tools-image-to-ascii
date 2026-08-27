@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AY 小工具：圖片轉 ASCII 文字，支援亮度、對比度與輸出尺寸即時調整。">
+  <title>AY Tools · Image to ASCII</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">AY TOOLS</p>
+        <h1>圖片轉 ASCII 文字</h1>
+        <p class="subtitle">圖片只在你的瀏覽器內處理，不會上傳。</p>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="controls-panel">
+        <label class="upload-box" for="imageInput">
+          <strong>選擇圖片</strong>
+          <span>PNG / JPG / WEBP 等瀏覽器可讀格式</span>
+          <input id="imageInput" type="file" accept="image/*">
+        </label>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label for="brightness">明暗</label>
+            <output id="brightnessValue">0</output>
+          </div>
+          <input id="brightness" type="range" min="-100" max="100" value="0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label for="contrast">對比度</label>
+            <output id="contrastValue">0</output>
+          </div>
+          <input id="contrast" type="range" min="-100" max="100" value="0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <label for="asciiWidth">ASCII 寬度</label>
+            <output id="asciiWidthValue">90</output>
+          </div>
+          <input id="asciiWidth" type="range" min="20" max="200" value="90">
+        </div>
+
+        <div class="control-group">
+          <label for="characterSet">字符表</label>
+          <select id="characterSet">
+            <option value="dense">細緻 · @%#*+=-:. </option>
+            <option value="classic">經典 · @#S%?*+;:,. </option>
+            <option value="blocks">方塊 · █▓▒░ </option>
+            <option value="simple">簡潔 · #*:. </option>
+          </select>
+        </div>
+
+        <label class="checkbox-row">
+          <input id="invert" type="checkbox">
+          <span>反轉字符明暗</span>
+        </label>
+
+        <div class="button-row">
+          <button id="resetButton" type="button" class="secondary">重設參數</button>
+          <button id="downloadButton" type="button" disabled>下載 TXT</button>
+        </div>
+
+        <p id="status" class="status" aria-live="polite">請先選擇一張圖片。</p>
+
+        <div class="preview-card">
+          <div class="section-title">處理後預覽</div>
+          <canvas id="previewCanvas" aria-label="處理後圖片預覽"></canvas>
+        </div>
+      </aside>
+
+      <section class="output-panel">
+        <div class="output-header">
+          <div>
+            <div class="section-title">ASCII 輸出</div>
+            <div id="asciiSize" class="meta">—</div>
+          </div>
+        </div>
+        <div class="ascii-scroll">
+          <pre id="asciiOutput">選擇圖片後，這裡會即時產生 ASCII 文字。</pre>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <canvas id="workCanvas" hidden></canvas>
+  <script src="app.js"></script>
+</body>
+</html>
