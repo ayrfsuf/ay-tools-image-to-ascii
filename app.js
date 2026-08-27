@@ -102,8 +102,7 @@
   function buildRamp() {
     const preset = rampPresets[refs.rampSelect.value] || rampPresets.dense;
     const chars = preset.chars.map((char) => refs.fullwidthInput.checked ? (fullwidthMap[char] || char) : char);
-    const mappedChars = refs.invertInput.checked ? [...chars].reverse() : chars;
-    return mappedChars.map((char, idx) => ({ char, density: preset.densities[idx] }));
+    return chars.map((char, idx) => ({ char, density: preset.densities[idx] }));
   }
 
   function adjustRgbToGray(r, g, b, brightness, contrast, blackPoint, whitePoint, gamma) {
@@ -251,13 +250,13 @@
 
     const grayMap = buildProcessedGrayMap(workCtx, cols, rows, settings);
     const ramp = buildRamp();
-    let lines = [];
+    const lines = [];
 
     for (let y = 0; y < rows; y++) {
       let line = '';
       for (let x = 0; x < cols; x++) {
         const gray = grayMap[y * cols + x];
-        const darkness = 1 - gray;
+        const darkness = refs.invertInput.checked ? gray : 1 - gray;
         line += chooseGlyph(darkness, ramp);
       }
       lines.push(line);
