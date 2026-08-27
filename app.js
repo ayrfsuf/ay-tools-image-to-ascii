@@ -102,8 +102,8 @@
   function buildRamp() {
     const preset = rampPresets[refs.rampSelect.value] || rampPresets.dense;
     const chars = preset.chars.map((char) => refs.fullwidthInput.checked ? (fullwidthMap[char] || char) : char);
-    const items = chars.map((char, idx) => ({ char, density: preset.densities[idx] }));
-    return refs.invertInput.checked ? [...items].reverse() : items;
+    const mappedChars = refs.invertInput.checked ? [...chars].reverse() : chars;
+    return mappedChars.map((char, idx) => ({ char, density: preset.densities[idx] }));
   }
 
   function adjustRgbToGray(r, g, b, brightness, contrast, blackPoint, whitePoint, gamma) {
