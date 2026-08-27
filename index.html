@@ -3,91 +3,100 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AY 小工具：圖片轉 ASCII 文字，支援亮度、對比度與輸出尺寸即時調整。">
   <title>AY Tools · Image to ASCII</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="app-shell">
-    <header class="app-header">
-      <div>
-        <p class="eyebrow">AY TOOLS</p>
-        <h1>圖片轉 ASCII 文字</h1>
-        <p class="subtitle">圖片只在你的瀏覽器內處理，不會上傳。</p>
+  <main class="app">
+    <aside class="panel controls">
+      <h1>圖片轉 ASCII</h1>
+      <p class="muted">本地處理，不上傳圖片。預設開啟全角輸出，較適合非等寬中文環境。</p>
+
+      <div class="field">
+        <label for="fileInput">選擇圖片</label>
+        <input id="fileInput" type="file" accept="image/*">
       </div>
-    </header>
 
-    <section class="workspace">
-      <aside class="controls-panel">
-        <label class="upload-box" for="imageInput">
-          <strong>選擇圖片</strong>
-          <span>PNG / JPG / WEBP 等瀏覽器可讀格式</span>
-          <input id="imageInput" type="file" accept="image/*">
-        </label>
+      <div class="field range-field">
+        <div class="field-head"><label for="widthInput">輸出寬度</label><output id="widthValue">72</output></div>
+        <input id="widthInput" type="range" min="20" max="180" value="72">
+      </div>
 
-        <div class="control-group">
-          <div class="control-label">
-            <label for="brightness">明暗</label>
-            <output id="brightnessValue">0</output>
-          </div>
-          <input id="brightness" type="range" min="-100" max="100" value="0">
+      <div class="field range-field">
+        <div class="field-head"><label for="aspectInput">字格比例</label><output id="aspectValue">0.50</output></div>
+        <input id="aspectInput" type="range" min="0.30" max="1.00" step="0.01" value="0.50">
+      </div>
+
+      <div class="field range-field">
+        <div class="field-head"><label for="brightnessInput">明暗</label><output id="brightnessValue">0</output></div>
+        <input id="brightnessInput" type="range" min="-100" max="100" value="0">
+      </div>
+
+      <div class="field range-field">
+        <div class="field-head"><label for="contrastInput">對比度</label><output id="contrastValue">0</output></div>
+        <input id="contrastInput" type="range" min="-100" max="100" value="0">
+      </div>
+
+      <div class="field range-field">
+        <div class="field-head"><label for="gammaInput">Gamma / 中間調</label><output id="gammaValue">1.00</output></div>
+        <input id="gammaInput" type="range" min="0.20" max="3.00" step="0.01" value="1.00">
+      </div>
+
+      <details class="advanced" open>
+        <summary>進階</summary>
+
+        <div class="field range-field">
+          <div class="field-head"><label for="blackPointInput">黑點</label><output id="blackPointValue">0</output></div>
+          <input id="blackPointInput" type="range" min="0" max="255" value="0">
         </div>
 
-        <div class="control-group">
-          <div class="control-label">
-            <label for="contrast">對比度</label>
-            <output id="contrastValue">0</output>
-          </div>
-          <input id="contrast" type="range" min="-100" max="100" value="0">
+        <div class="field range-field">
+          <div class="field-head"><label for="whitePointInput">白點</label><output id="whitePointValue">255</output></div>
+          <input id="whitePointInput" type="range" min="0" max="255" value="255">
         </div>
 
-        <div class="control-group">
-          <div class="control-label">
-            <label for="asciiWidth">ASCII 寬度</label>
-            <output id="asciiWidthValue">90</output>
-          </div>
-          <input id="asciiWidth" type="range" min="20" max="200" value="90">
+        <div class="field range-field">
+          <div class="field-head"><label for="detailInput">細節 / 邊緣</label><output id="detailValue">0</output></div>
+          <input id="detailInput" type="range" min="0" max="100" value="0">
         </div>
 
-        <div class="control-group">
-          <label for="characterSet">字符表</label>
-          <select id="characterSet">
-            <option value="dense">細緻 · @%#*+=-:. </option>
-            <option value="classic">經典 · @#S%?*+;:,. </option>
-            <option value="blocks">方塊 · █▓▒░ </option>
-            <option value="simple">簡潔 · #*:. </option>
+        <div class="field">
+          <label for="rampSelect">字符集</label>
+          <select id="rampSelect">
+            <option value="dense">細膩：@%#*+=-:. </option>
+            <option value="classic">經典：@#S%?*+;:,. </option>
+            <option value="blocks">塊狀：█▓▒░ </option>
+            <option value="simple">極簡：#*:. </option>
           </select>
         </div>
 
-        <label class="checkbox-row">
-          <input id="invert" type="checkbox">
-          <span>反轉字符明暗</span>
-        </label>
-
-        <div class="button-row">
-          <button id="resetButton" type="button" class="secondary">重設參數</button>
-          <button id="downloadButton" type="button" disabled>下載 TXT</button>
+        <div class="checks">
+          <label><input id="fullwidthInput" type="checkbox" checked> 全角輸出</label>
+          <label><input id="invertInput" type="checkbox"> 反轉明暗</label>
         </div>
+      </details>
 
-        <p id="status" class="status" aria-live="polite">請先選擇一張圖片。</p>
+      <div class="actions">
+        <button id="autoButton" type="button">自動優化</button>
+        <button id="resetButton" type="button">重設</button>
+        <button id="copyButton" type="button" disabled>複製文字</button>
+        <button id="downloadButton" type="button" disabled>保存 TXT</button>
+      </div>
 
-        <div class="preview-card">
-          <div class="section-title">處理後預覽</div>
-          <canvas id="previewCanvas" aria-label="處理後圖片預覽"></canvas>
-        </div>
-      </aside>
+      <div class="preview-wrap">
+        <div class="field-head"><span>處理後預覽</span><span id="statusText" class="muted">先選圖</span></div>
+        <canvas id="previewCanvas"></canvas>
+      </div>
+    </aside>
 
-      <section class="output-panel">
-        <div class="output-header">
-          <div>
-            <div class="section-title">ASCII 輸出</div>
-            <div id="asciiSize" class="meta">—</div>
-          </div>
+    <section class="panel output-panel">
+      <div class="output-head">
+        <div>
+          <h2>ASCII 輸出</h2>
+          <p id="sizeText" class="muted">—</p>
         </div>
-        <div class="ascii-scroll">
-          <pre id="asciiOutput">選擇圖片後，這裡會即時產生 ASCII 文字。</pre>
-        </div>
-      </section>
+      </div>
+      <pre id="asciiOutput">選擇圖片後，這裡會實時生成 ASCII 文字。</pre>
     </section>
   </main>
 
